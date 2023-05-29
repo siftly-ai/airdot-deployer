@@ -25,7 +25,7 @@ pip install "git+https://github.com/airdot-io/airdot-Deploy.git@main#egg=airdot"
 
 ```bash
 # run this in terminal.
-docker network create minio-network && wget  https://github.com/airdot-Deploy/airdot-Deploy/blob/main/docker-compose.yaml && docker-compose -p airdot up
+docker network create minio-network && wget  https://github.com/airdot-io/airdot-Deploy/blob/main/docker-compose.yaml && docker-compose -p airdot up
 ```
 
 ```python
