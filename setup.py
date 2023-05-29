@@ -29,8 +29,8 @@ DEV_REQUIRED = [
 
 setup(
     name="airdot",
-    url="https://github.com/Abhinavfreecodecamp/ml-deployer-os",
-    author="Abhinav Singh",
+    url="https://github.com/airdot-io/airdot-Deploy/",
+    author="airdot-io",
     author_email="abhhinav035991@gmail.com",
     packages=find_packages(),
     version=VERSION,
