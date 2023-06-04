@@ -1,0 +1,35 @@
+version: '3'
+services:
+  minio:
+    image: minio/minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - ./data:/data
+    environment:
+      - MINIO_ACCESS_KEY='minioadmin'
+      - MINIO_SECRET_KEY='minioadmin'
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=miniopassword
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  cache:
+    image: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+networks:
+  default:
+    external:
+      name: minio-network
+volumes:
+  cache:
+    driver: local
