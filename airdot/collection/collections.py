@@ -38,9 +38,16 @@ class authentication:
 
 
 class source_file_props:
-    def __init__(self, name: str, contents: str):
-        self.name = name
-        self.contents = contents
+    def __init__(self, name: str, seldon_contents: str, user_contents: str):
+        self.seldon_name = 'seldon_wrapper.py'
+        self.user_name = name
+        self.seldon_contents = seldon_contents
+        self.user_contents = user_contents
 
     def as_dict(self):
-        return {"name": self.name, "contents": self.contents}
+        return {
+            "user_name": self.user_name,
+            "seldon_name":self.seldon_name,
+            "seldon_contents": self.seldon_contents,
+            "user_contents":self.user_contents
+        }

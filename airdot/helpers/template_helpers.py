@@ -19,7 +19,7 @@ def make_soruce_file(
     dir: str, pyProps: python_function_prop, source_file_name: str = "source"
 ):
 
-    sourceParts: List[str] = [
+    source_parts: List[str] = [
         "import sys",
         "from flask import escape, jsonify, Flask, request",
         "import pickle",
@@ -28,65 +28,51 @@ def make_soruce_file(
     ]
     if pyProps.namespace_froms:
         for iAs, iModule in pyProps.namespace_froms.items():
-            sourceParts.append(f"from {iModule} import {iAs}")
+            source_parts.append(f"from {iModule} import {iAs}")
     if pyProps.namespace_imports:
         for iAs, iModule in pyProps.namespace_imports.items():
             if iModule == iAs:
-                sourceParts.append(f"import {iModule}")
+                source_parts.append(f"import {iModule}")
             else:
-                sourceParts.append(f"import {iModule} as {iAs}")
-    add_space(sourceParts)
-    sourceParts.append(
+                source_parts.append(f"import {iModule} as {iAs}")
+    add_space(source_parts)
+    source_parts.append(
         "client = boto3.resource('s3', endpoint_url='http://airdot-minio-1:9000', aws_access_key_id='minioadmin',aws_secret_access_key='miniopassword')"
     )
-    sourceParts.append(f"bucket = client.Bucket('{pyProps.name.replace('_','-')}')")
+    source_parts.append(f"bucket = client.Bucket('{pyProps.name.replace('_','-')}')")
     if pyProps.namespace_vars and pyProps.namespace_vars_desc:
         for nName, _ in pyProps.namespace_vars.items():
-            sourceParts.append(
+            source_parts.append(
                 f"{nName} = pickle.loads(bucket.Object('{nName}.pkl').get()['Body'].read())"
             )
     if pyProps.custom_init_code:
-        sourceParts.append("\n" + "\n\n".join(pyProps.custom_init_code))
-    add_space(sourceParts)
+        source_parts.append("\n" + "\n\n".join(pyProps.custom_init_code))
+    add_space(source_parts)
     if pyProps.namespace_functions:
         for _, fSource in pyProps.namespace_functions.items():
-            sourceParts.append(fSource)
-            add_space(sourceParts)
-    add_space(sourceParts)
+            source_parts.append(fSource)
+            add_space(source_parts)
+    add_space(source_parts)
 
     if pyProps.source:
-        sourceParts.append("# main function")
-        sourceParts.append(pyProps.source)
+        source_parts.append("# main function")
+        source_parts.append(pyProps.source)
 
     # add calling method
-    add_space(sourceParts)
-    sourceParts.append("@app.route('/', methods=['POST'])")
-    sourceParts.append(f"def main_{pyProps.name}():")
-    sourceParts.append("\tdata = request.get_json()")
-    sourceParts.append("\tif data is None:")
-    sourceParts.append(f"\t\treturn jsonify({pyProps.name}())")
-    sourceParts.append("\telse:")
-    sourceParts.append(f"\t\treturn jsonify({pyProps.name}(**data))")
-    return source_file_props(f"{source_file_name}.py", "\n".join(sourceParts))
+    add_space(source_parts)
+    source_parts.append("@app.route('/', methods=['POST'])")
+    source_parts.append(f"def main_{pyProps.name}():")
+    source_parts.append("\tdata = request.get_json()")
+    source_parts.append("\tif data is None:")
+    source_parts.append(f"\t\treturn jsonify({pyProps.name}())")
+    source_parts.append("\telse:")
+    source_parts.append(f"\t\treturn jsonify({pyProps.name}(**data))")
+    return source_file_props(f"{source_file_name}.py", "\n".join(source_parts))
 
-
-def make_soruce_file_seldon(
+def build_source_template(
     dir: str, pyProps: python_function_prop, source_file_name: str = "source", bucket_type='gcs', bucket_name = 'seldon-test'
 ):
-    def check_function_template(line):
-        return line.startswith("def")
-
-    def add_self_to_function(line):
-        if line.startswith("def"):
-            temp_str = ""
-            for char in line:
-                if char == "(":
-                    temp_str = temp_str + char + "self, "
-                    continue
-                temp_str = temp_str + char
-        return temp_str
-
-    sourceParts: List[str] = [
+    source_parts: List[str] = [
         "import sys",
         "from flask import escape, jsonify, Flask, request",
         "import pickle",
@@ -95,71 +81,79 @@ def make_soruce_file_seldon(
         bucket_type_import[bucket_type],
     ]
 
+    # adding custom imports
     if pyProps.namespace_froms:
         for iAs, iModule in pyProps.namespace_froms.items():
-            sourceParts.append(f"from {iModule} import {iAs}")
+            source_parts.append(f"from {iModule} import {iAs}")
     if pyProps.namespace_imports:
         for iAs, iModule in pyProps.namespace_imports.items():
             if iModule == iAs:
-                sourceParts.append(f"import {iModule}")
+                source_parts.append(f"import {iModule}")
             else:
-                sourceParts.append(f"import {iModule} as {iAs}")
+                source_parts.append(f"import {iModule} as {iAs}")
 
-    add_space(sourceParts)
-
-    sourceParts.append(f"class {pyProps.name}_class(object):")
-    sourceParts.append(f"\tdef __init__(self):")
-
-    add_space(sourceParts)
-
+    for _ in range(4):
+        add_space(source_parts)
+    #adding bucket imports
     if bucket_type is 'gcs':
-        sourceParts.append("\t\tstorage_client = storage.Client()")
-        sourceParts.append(f"\t\tbucket = storage_client.bucket({bucket_name})")
+        source_parts.append("storage_client = storage.Client()")
+        source_parts.append(f"bucket = storage_client.bucket('{bucket_name}')")
         if pyProps.namespace_vars and pyProps.namespace_vars_desc:
             for nName, _ in pyProps.namespace_vars.items():
-                sourceParts.append(f"\t\t{nName}_blob = bucket.get_blob({nName}.pkl')")
-                sourceParts.append(f"\t\tself.{nName} = BytesIO(blob.download_as_bytes())")
+                source_parts.append(f"{nName}_blob = bucket.get_blob({nName}.pkl')")
+                source_parts.append(f"self.{nName} = BytesIO(blob.download_as_bytes())")
 
     elif bucket_type is 'minio': 
-        sourceParts.append(
-            "\t\tclient = boto3.resource('s3', endpoint_url='http://airdot-minio-1:9000', aws_access_key_id='minioadmin',aws_secret_access_key='miniopassword')"
+        source_parts.append(
+            "client = boto3.resource('s3', endpoint_url='http://airdot-minio-1:9000', aws_access_key_id='minioadmin',aws_secret_access_key='miniopassword')"
         )
-        sourceParts.append(f"bucket = client.Bucket('{pyProps.name.replace('_','-')}')")
+        source_parts.append(f"bucket = client.Bucket('{pyProps.name.replace('_','-')}')")
         if pyProps.namespace_vars and pyProps.namespace_vars_desc:
             for nName, _ in pyProps.namespace_vars.items():
-                sourceParts.append(
+                source_parts.append(
                     f"{nName} = pickle.loads(bucket.Object('{nName}.pkl').get()['Body'].read())"
                 )
-
     if pyProps.custom_init_code:
-        sourceParts.append("\n" + "\n\n".join(pyProps.custom_init_code))
-
-    
-        
-    add_space(sourceParts)
+        source_parts.append("\n" + "\n\n".join(pyProps.custom_init_code))
+    add_space(source_parts)
     if pyProps.namespace_functions:
         for _, fSource in pyProps.namespace_functions.items():
-            sourceParts.append("\t\t"+fSource)
-            add_space(sourceParts)
-    add_space(sourceParts)
-
-    empty_str = ""
-    for line in pyProps.source.split('\n'):
-        if check_function_template(line):
-            line = add_self_to_function(line)
-        line = "\t" + line
-        empty_str = empty_str + "\n" + line
-    pyProps.source = empty_str
+            source_parts.append(fSource)
+            add_space(source_parts)
+    add_space(source_parts)
 
     if pyProps.source:
-        sourceParts.append("# main function")
-        sourceParts.append(pyProps.source)
+        source_parts.append("# main function")
+        source_parts.append(pyProps.source)
+    return source_parts
+
+
+def make_soruce_file_seldon(
+    dir: str, pyProps: python_function_prop, source_file_name: str = "source", bucket_type='gcs', bucket_name = 'seldon-test'
+):
+
+    source_parts: List[str] = [
+        "import logging",
+        f"from {pyProps.name}_source import {pyProps.name}"
+    ]
+
+    add_space(source_parts)
+
+    source_parts.append(f"class {pyProps.name}_class(object):")
+    source_parts.append(f"\tdef __init__(self):")
+    source_parts.append(f"\t\t logging.info('service created ready to serve')")
+
+    add_space(source_parts)
 
     # add calling method
-    add_space(sourceParts)
-    sourceParts.append(f"\tdef predict(self, data):")
-    sourceParts.append(f"\t\treturn self.{pyProps.name}(**data)")
-    return source_file_props(f"{source_file_name}.py", "\n".join(sourceParts))
+    add_space(source_parts)
+    source_parts.append(f"\tdef predict(self, data):")
+    source_parts.append(f"\t\treturn {pyProps.name}(**data)")
+
+    user_source = build_source_template(dir, pyProps, source_file_name, bucket_type, bucket_name)
+
+
+    return source_file_props(f"{pyProps.name}_source.py", "\n".join(source_parts), "\n".join(user_source))
 
 
 
