@@ -1,7 +1,6 @@
 from google.cloud import storage
 import pandas as pd
 from io import BytesIO, StringIO
-from google.oauth2 import service_account
 
 
 class gcs_utils:
@@ -130,5 +129,5 @@ class gcs_utils:
         storage_client = storage.Client()
         bucket = storage_client.bucket(bucket_name)
         blob = bucket.blob(blob_name)
-        blob.upload_from_string(data, "text/csv")
+        blob.upload_from_string(data)
         return True
