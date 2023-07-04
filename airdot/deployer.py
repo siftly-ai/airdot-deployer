@@ -42,6 +42,7 @@ class Deployer:
         minio_endpoint: str = "http://127.0.0.1:9000",
         redis_endpoint: str = "localhost:6379",
         local_deployment=True,
+        deployment_configuration = None
     ) -> None:
         self.docker_client = docker_helper()
         self.minio_endpoint = minio_endpoint
@@ -110,7 +111,7 @@ class Deployer:
         else:
             raise Exception("Passed object is not callable")
 
-        source_file = make_soruce_file_seldon(
+        source_file = make_soruce_file(
             dir=dir_id, pyProps=func_props, source_file_name=name
         )
         return {
