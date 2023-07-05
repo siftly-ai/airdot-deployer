@@ -9,7 +9,7 @@ from typing import cast, Union, Callable, Any, Dict, List, Optional
 from airdot.helpers.version_helpers import get_python_default_version
 from airdot.helpers.pkg_helpers import get_environment_pkgs, get_pip_list
 from airdot.helpers.runtime_helper import get_function_properties
-from airdot.helpers.template_helpers import make_soruce_file
+from airdot.helpers.template_helpers import make_soruce_file, make_soruce_file_seldon
 from airdot.helpers.general_helpers import get_name, get_difference
 from airdot.helpers.data_object_helpers import (
     make_and_upload_data_files,
@@ -42,6 +42,7 @@ class Deployer:
         minio_endpoint: str = "http://127.0.0.1:9000",
         redis_endpoint: str = "localhost:6379",
         local_deployment=True,
+        deployment_configuration = None
     ) -> None:
         self.docker_client = docker_helper()
         self.minio_endpoint = minio_endpoint
@@ -125,6 +126,7 @@ class Deployer:
             "python_version": python_version,
             "system_packages": None,  # need to see this
             "dockerRun": None,  # need to build this
+            'func_props':func_props
         }
 
     def _list_to_json(self, cld_function_string):
