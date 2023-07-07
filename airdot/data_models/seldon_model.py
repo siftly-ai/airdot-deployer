@@ -47,7 +47,7 @@ class SeldonSpecs(BaseModel):
     
 
 class SeldonGraph(BaseModel):
-    name:Optional[str] = 'seldon_model'
+    name:Optional[str] = {'name':'seldon_model'}
 
 
 class SeldonConfiguration(BaseModel):

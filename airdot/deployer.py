@@ -4,6 +4,8 @@ import docker
 import shutil
 import logging
 from time import sleep
+from typing_extensions import Literal
+from typing import Optional
 from docker.errors import APIError
 from typing import cast, Union, Callable, Any, Dict, List, Optional
 from airdot.helpers.version_helpers import get_python_default_version
@@ -41,18 +43,17 @@ class Deployer:
         self,
         minio_endpoint: str = "http://127.0.0.1:9000",
         redis_endpoint: str = "localhost:6379",
-        local_deployment=True,
-        deployment_configuration = None
+        deployment_type: Optional[Literal['test', 'seldon', 'kserve']] = 'test'
     ) -> None:
         self.docker_client = docker_helper()
         self.minio_endpoint = minio_endpoint
         self.redis_endpoint = redis_endpoint
-        self.local_deployment = local_deployment
+        self.deployment_type = deployment_type
         self.redis_helper_obj = redis_helper(
             host=self.redis_endpoint.split(":")[0],
             port=self.redis_endpoint.split(":")[1],
         )
-        if local_deployment:
+        if deployment_type == 'test':
             self.minio_network = "minio-network"
 
     def _perform_user_login(self):
