@@ -10,30 +10,40 @@ class Deployment(BaseModel):
     bucket_type: Optional[str] = None,
     image_uri: Optional[str] = None
     seldon_configuration: Optional[SeldonConfiguration] = {
-        'apiVersion': 'machinelearning.seldon.io/v1',
-        'kind': 'SeldonDeployment',
-        'metadata': {
-            'name':'seldon_model'
-        },
-        'specs':{
-            "name": "None",
-            "predictors": {
-                "componentSpecs": {
-                    "specs": {
-                        "container": {
+                "apiVersion": "None",
+                "kind": "SeldonDeployment",
+                "metadata": {
+                    "name": "None"
+                },
+                "spec": {
+                    "name": "seldon-test",
+                    "predictors": [{
+                    "componentSpecs":[{
+                        "spec": {
+                        "containers": [{
                             "name": "None",
                             "image": "None",
                             "imagePullPolicy": "ifNotPresent",
-                            "resources": {"requests": {"cpu": "1", "memory": "1M"}},
+                            "resources": {
+                            "requests": {
+                                "cpu": "1",
+                                "memory": "1M"
+                            }
+                            }
+                        }]
                         }
-                    }
-                },
-                'graph':{
-                    'name':'seldon',
+                    }],
+                    "graph":{
+                        "children":[],
+                        "name":"None",
+                        "endpoint": {
+                            "type":"REST"
+                        },
+                        "type": "MODEL"
+                    },
+                    "name":"seldon-test",
+                    "replicas":1
+                    }]
                 }
-            },
-        },
-        'name':'default',
-        'replicas':1
-    }
+            }
     kserve_configuration: Optional[KServe]

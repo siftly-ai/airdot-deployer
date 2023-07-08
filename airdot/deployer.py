@@ -277,7 +277,7 @@ class Deployer:
                 seldon_configuration=seldon_configuration,
             )
             deployment_path = content_helper_obj.write_contents()
-            raise TypeError
+            #raise TypeError
             # building s2i image
             base_image = seldon_images[self.deploy_dict["python_version"]]
             builder_image = self.deployment_configuration['image_uri']
@@ -288,7 +288,7 @@ class Deployer:
             s2i_python_helper_obj.build_and_push_image(source_path=deployment_path)
             # k8s application
             _ = k8s().apply_kubernetes_resources(
-                resource_paths=deployment_path + "/seldon_model.yaml"
+                resource_paths=deployment_path + "/seldon_model.json"
             )
 
         else:
