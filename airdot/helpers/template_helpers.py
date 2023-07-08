@@ -4,15 +4,13 @@ from airdot.collection.collections import python_function_prop, source_file_prop
 from airdot.helpers.general_helpers import add_space
 
 bucket_type_import = {
-    "gcs":"from google.cloud import storage",
-    "s3":"import boto3",
-    "azure":"import boto3",
-    "minio":"import boto3"
+    "gcs": "from google.cloud import storage",
+    "s3": "import boto3",
+    "azure": "import boto3",
+    "minio": "import boto3",
 }
 
-object_type_import = {
-
-}
+object_type_import = {}
 
 
 def make_soruce_file(
@@ -67,10 +65,17 @@ def make_soruce_file(
     source_parts.append(f"\t\treturn jsonify({pyProps.name}())")
     source_parts.append("\telse:")
     source_parts.append(f"\t\treturn jsonify({pyProps.name}(**data))")
-    return source_file_props(f"{source_file_name}.py", "\n".join(source_parts))
+    return source_file_props(
+        name=f"{source_file_name}.py", user_contents="\n".join(source_parts)
+    )
+
 
 def build_source_template(
-    dir: str, pyProps: python_function_prop, source_file_name: str = "source", bucket_type='gcs', bucket_name = 'seldon-test'
+    dir: str,
+    pyProps: python_function_prop,
+    source_file_name: str = "source",
+    bucket_type="gcs",
+    bucket_name="seldon-test",
 ):
     source_parts: List[str] = [
         "import sys",
@@ -94,20 +99,24 @@ def build_source_template(
 
     for _ in range(4):
         add_space(source_parts)
-    #adding bucket imports
-    if bucket_type is 'gcs':
+    # adding bucket imports
+    if bucket_type is "gcs":
         source_parts.append("storage_client = storage.Client()")
-        source_parts.append(f"bucket = storage_client.bucket('{bucket_name}')")
+        source_parts.append(
+            f"bucket = storage_client.bucket('{pyProps.name.replace('_','-')}')"
+        )
         if pyProps.namespace_vars and pyProps.namespace_vars_desc:
             for nName, _ in pyProps.namespace_vars.items():
                 source_parts.append(f"{nName}_blob = bucket.get_blob({nName}.pkl')")
                 source_parts.append(f"self.{nName} = BytesIO(blob.download_as_bytes())")
 
-    elif bucket_type is 'minio': 
+    elif bucket_type is "minio":
         source_parts.append(
             "client = boto3.resource('s3', endpoint_url='http://airdot-minio-1:9000', aws_access_key_id='minioadmin',aws_secret_access_key='miniopassword')"
         )
-        source_parts.append(f"bucket = client.Bucket('{pyProps.name.replace('_','-')}')")
+        source_parts.append(
+            f"bucket = client.Bucket('{pyProps.name.replace('_','-')}')"
+        )
         if pyProps.namespace_vars and pyProps.namespace_vars_desc:
             for nName, _ in pyProps.namespace_vars.items():
                 source_parts.append(
@@ -129,12 +138,16 @@ def build_source_template(
 
 
 def make_soruce_file_seldon(
-    dir: str, pyProps: python_function_prop, source_file_name: str = "source", bucket_type='gcs', bucket_name = 'seldon-test'
+    dir: str,
+    pyProps: python_function_prop,
+    source_file_name: str = "source",
+    bucket_type="gcs",
+    bucket_name="seldon-test",
 ):
 
     source_parts: List[str] = [
         "import logging",
-        f"from {pyProps.name}_source import {pyProps.name}"
+        f"from {pyProps.name}_source import {pyProps.name}",
     ]
 
     add_space(source_parts)
@@ -150,21 +163,24 @@ def make_soruce_file_seldon(
     source_parts.append(f"\tdef predict(self, data):")
     source_parts.append(f"\t\treturn {pyProps.name}(**data)")
 
-    user_source = build_source_template(dir, pyProps, source_file_name, bucket_type, bucket_name)
+    user_source = build_source_template(
+        dir, pyProps, source_file_name, bucket_type, bucket_name
+    )
+
+    return source_file_props(
+        name=f"{pyProps.name}_source.py",
+        seldon_contents="\n".join(source_parts),
+        user_contents="\n".join(user_source),
+    )
 
 
-    return source_file_props(f"{pyProps.name}_source.py", "\n".join(source_parts), "\n".join(user_source))
-
-
-
-
-def get_docker_template(req_string):
+def get_docker_template(req_string, source_name):
     dockerBuildParts: List[str] = [
         "FROM python:3.8-slim",
         "ENV APP_HOME /app",
         "WORKDIR $APP_HOME",
         "COPY . ./",
         f"RUN pip install {req_string}",
-        "CMD exec gunicorn --bind :8080 --workers 1 --threads 8 app:app",
+        f"CMD exec gunicorn --bind :8080 --workers 1 --threads 8 {source_name}:app",
     ]
     return dockerBuildParts

@@ -96,20 +96,26 @@ def to_yaml(content_hash: str, fileSize: int, obj_desc: Dict[str, Any]) -> str:
     return yaml.dump(obj, width=1000)
 
 
-def put_secure_data(bucket_id, open_id, data: bytes, desc: str, endpoint: str):
+def put_secure_data(
+    bucket_id, open_id, data: bytes, desc: str, endpoint: str, bucket_type
+):
     try:
-        minio_helper_obj = minio_helper(endpoint=endpoint)
-        minio_helper_obj.create_bucket(bucket_name=bucket_id)
-        minio_helper_obj.put_object(bucket=bucket_id, key=f"{desc}.pkl", data=data)
-        return True
+        if bucket_type == 'minio':
+            print("test deployment, switching to local minio bucket")
+            minio_helper_obj = minio_helper(endpoint=endpoint)
+            minio_helper_obj.create_bucket(bucket_name=bucket_id)
+            minio_helper_obj.put_object(bucket=bucket_id, key=f"{desc}.pkl", data=data)
+            return True
     except Exception as e:
         print(f"failed to upload data object. Please try again {e}")
         return False
 
 
-def upload_runtime_object(bucket_id, open_id, obj, desc: str, endpoint: str):
+def upload_runtime_object(
+    bucket_id, open_id, obj, desc: str, endpoint: str, bucket_type: str
+):
     (data, content_hash, obj_size) = serialize_zstd(obj)
-    response = put_secure_data(bucket_id, open_id, data, desc, endpoint)
+    response = put_secure_data(bucket_id, open_id, data, desc, endpoint, bucket_type)
     if response:
         yamlObj = to_yaml(content_hash, obj_size, describe_object(obj, 1))
         return yamlObj  # need to think a way to save complete yamlObj
@@ -118,11 +124,13 @@ def upload_runtime_object(bucket_id, open_id, obj, desc: str, endpoint: str):
 
 
 # uploading
-def make_and_upload_data_files(bucket_id, open_id, py_state, endpoint):
+def make_and_upload_data_files(
+    bucket_id, open_id, py_state, endpoint, bucket_type=None
+):
     dataFiles: Dict[str, str] = {}
     if py_state.namespace_vars and py_state.namespace_vars_desc:
         for nName, nVal in py_state.namespace_vars.items():
             dataFiles[f"{nName}.pkl"] = upload_runtime_object(
-                bucket_id, open_id, nVal, nName, endpoint
+                bucket_id, open_id, nVal, nName, endpoint, bucket_type=bucket_type
             )
     return dataFiles

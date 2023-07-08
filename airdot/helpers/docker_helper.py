@@ -92,6 +92,27 @@ class docker_helper:
             )
             return image, dir
         return None, None
+    
+    def build_image(self, path, name):
+        image, _ = self.client.images.build(
+                path=path, tag=f"{name}"
+            )
+        return image
+
+    def get_available_images(self):
+        try:
+            images = self.client.images.list()
+            return [image.tags[0] for image in images if image.tags]
+        except docker.errors.APIError as e:
+            print(f"Failed to retrieve available images: {e}")
+            return None
+
+    def pull_image(self, image_name):
+        try:
+            self.client.images.pull(image_name)
+            print(f"Image '{image_name}' pulled successfully.")
+        except docker.errors.APIError as e:
+            print(f"Failed to pull image: {e}")
 
     def create_custom_docker_file(self, custum_req, dir):
         try:
