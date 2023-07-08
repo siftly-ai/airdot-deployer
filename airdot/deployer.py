@@ -31,6 +31,7 @@ from airdot import URL, VERIFY
 from airdot.helpers.docker_helper import docker_helper
 from airdot.helpers.redis_helper import redis_helper
 from airdot.helpers.network_helper import find_available_port
+from airdot.helpers.seldon_helper import seldon_helpers
 
 auth_ = authentication()
 # python custom imports
@@ -43,17 +44,18 @@ class Deployer:
         self,
         minio_endpoint: str = "http://127.0.0.1:9000",
         redis_endpoint: str = "localhost:6379",
-        deployment_type: Optional[Literal['test', 'seldon', 'kserve']] = 'test'
+        deployment_configuration: dict = {'deployment_type':'test', 'bucket_type': 'minio'}
     ) -> None:
         self.docker_client = docker_helper()
         self.minio_endpoint = minio_endpoint
         self.redis_endpoint = redis_endpoint
-        self.deployment_type = deployment_type
+        self.deployment_type = deployment_configuration['deployment_type']
+        self.deployment_configuration = deployment_configuration
         self.redis_helper_obj = redis_helper(
             host=self.redis_endpoint.split(":")[0],
             port=self.redis_endpoint.split(":")[1],
         )
-        if deployment_type == 'test':
+        if self.deployment_type == 'test':
             self.minio_network = "minio-network"
 
     def _perform_user_login(self):
@@ -87,7 +89,10 @@ class Deployer:
         python_packages: Optional[List[str]] = None,
         system_packages: Optional[List[str]] = None,
     ):
-        data_files, dir_id = None, None
+        data_files = None
+        dir_id = self.deployment_type
+        bucket_type = self.deployment_type['bucket']
+        
         if callable(func):
             python_version = get_python_default_version(python_version)
             env_python_packages = get_environment_pkgs(
@@ -102,6 +107,7 @@ class Deployer:
                 open_id=dir_id,
                 py_state=func_props,
                 endpoint=self.minio_endpoint,
+                bucket_type=bucket_type
             )  # uploading of data objects.
         elif (
             hasattr(func, "__module__")
@@ -111,10 +117,20 @@ class Deployer:
             pass
         else:
             raise Exception("Passed object is not callable")
+        
+        if self.deployment_type == 'test':
+            source_file = make_soruce_file(
+                dir=dir_id, pyProps=func_props, source_file_name=name, bucket_type=bucket_type
+            )
 
-        source_file = make_soruce_file(
-            dir=dir_id, pyProps=func_props, source_file_name=name
-        )
+        if self.deployment_type == 'seldon':
+            source_file = make_soruce_file_seldon(
+                dir=dir_id, pyProps=func_props, source_file_name=name, bucket_type=bucket_type
+            )
+
+        elif self.deployment_type == 'kserve':
+            pass
+
         return {
             "source_file": source_file.as_dict(),
             "value_files": {},
@@ -209,17 +225,18 @@ class Deployer:
             python_version=python_version,
             system_packages=system_packages,
         )
-        # prepare docker environment
-        # print(f"Deploying {self.deploy_dict['name']} it may take couple of minutes")
-        if self.local_deployment:
+        
+        # changes for seldon deployment.
+        if self.deployment_type is 'test':
+            print('switching to test deployment no deployment configuration is provided.')
+
+        elif self.deployment_type is 'seldon':
+            seldon_helper_obj = seldon_helpers(deployment_configuration = self.deployment_configuration) 
+            print(f'building seldon configuration for {seldon_helper_obj.get_current_cluster_context}')
             port = find_available_port(8000)
             print(f"deploying on port: {port}")
             function_status = self._run_function(port)
-        else:
-            pass
-
-        if function_status:
-            if self.local_deployment:
+            if function_status:
                 url = f"http://127.0.0.1:{port}"
                 function_curl = self.build_function_url(url=url)
                 print("deployment ready, access using the curl command below")
@@ -227,6 +244,7 @@ class Deployer:
                 self.update_redis(function_curl)
         else:
             print("failed to run function. Please try again.")
+
 
     def update_objects(self, object, function_id):
         data_files: Dict[str, str] = {}

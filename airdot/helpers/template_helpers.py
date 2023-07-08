@@ -97,7 +97,7 @@ def build_source_template(
     #adding bucket imports
     if bucket_type is 'gcs':
         source_parts.append("storage_client = storage.Client()")
-        source_parts.append(f"bucket = storage_client.bucket('{bucket_name}')")
+        source_parts.append(f"bucket = storage_client.bucket('{pyProps.name.replace('_','-')}')")
         if pyProps.namespace_vars and pyProps.namespace_vars_desc:
             for nName, _ in pyProps.namespace_vars.items():
                 source_parts.append(f"{nName}_blob = bucket.get_blob({nName}.pkl')")

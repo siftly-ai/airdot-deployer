@@ -38,7 +38,7 @@ class authentication:
 
 
 class source_file_props:
-    def __init__(self, name: str, seldon_contents: str, user_contents: str):
+    def __init__(self, name: str, user_contents: str = None, seldon_contents: str = None):
         self.seldon_name = 'seldon_wrapper.py'
         self.user_name = name
         self.seldon_contents = seldon_contents

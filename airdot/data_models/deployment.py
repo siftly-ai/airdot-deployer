@@ -6,7 +6,7 @@ from airdot.data_models.kserve_model import KServe
 
 class Deployment(BaseModel):
     deployment_type: Literal["seldon","kserve","local"]
-    bucket: Optional[str] = 'None'
+    bucket_type: Optional[str] = None
     seldon_configuration: Optional[SeldonConfiguration]
     kserve_configuration: Optional[KServe]
 
