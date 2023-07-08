@@ -38,8 +38,10 @@ class authentication:
 
 
 class source_file_props:
-    def __init__(self, name: str, user_contents: str = None, seldon_contents: str = None):
-        self.seldon_name = 'seldon_wrapper.py'
+    def __init__(
+        self, user_contents: str, seldon_contents: str = None, name: str = "source.py"
+    ):
+        self.seldon_name = "seldon_wrapper.py"
         self.user_name = name
         self.seldon_contents = seldon_contents
         self.user_contents = user_contents
@@ -47,7 +49,7 @@ class source_file_props:
     def as_dict(self):
         return {
             "user_name": self.user_name,
-            "seldon_name":self.seldon_name,
+            "seldon_name": self.seldon_name,
             "seldon_contents": self.seldon_contents,
-            "user_contents":self.user_contents
+            "user_contents": self.user_contents,
         }

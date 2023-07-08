@@ -96,10 +96,12 @@ def to_yaml(content_hash: str, fileSize: int, obj_desc: Dict[str, Any]) -> str:
     return yaml.dump(obj, width=1000)
 
 
-def put_secure_data(bucket_id, open_id, data: bytes, desc: str, endpoint: str, bucket_type):
+def put_secure_data(
+    bucket_id, open_id, data: bytes, desc: str, endpoint: str, bucket_type
+):
     try:
         if bucket_type is None:
-            print('switching to local minio bucket')
+            print("switching to local minio bucket")
             minio_helper_obj = minio_helper(endpoint=endpoint)
             minio_helper_obj.create_bucket(bucket_name=bucket_id)
             minio_helper_obj.put_object(bucket=bucket_id, key=f"{desc}.pkl", data=data)
@@ -109,7 +111,9 @@ def put_secure_data(bucket_id, open_id, data: bytes, desc: str, endpoint: str, b
         return False
 
 
-def upload_runtime_object(bucket_id, open_id, obj, desc: str, endpoint: str, bucket_type:str):
+def upload_runtime_object(
+    bucket_id, open_id, obj, desc: str, endpoint: str, bucket_type: str
+):
     (data, content_hash, obj_size) = serialize_zstd(obj)
     response = put_secure_data(bucket_id, open_id, data, desc, endpoint, bucket_type)
     if response:
@@ -120,7 +124,9 @@ def upload_runtime_object(bucket_id, open_id, obj, desc: str, endpoint: str, buc
 
 
 # uploading
-def make_and_upload_data_files(bucket_id, open_id, py_state, endpoint, bucket_type = None):
+def make_and_upload_data_files(
+    bucket_id, open_id, py_state, endpoint, bucket_type=None
+):
     dataFiles: Dict[str, str] = {}
     if py_state.namespace_vars and py_state.namespace_vars_desc:
         for nName, nVal in py_state.namespace_vars.items():

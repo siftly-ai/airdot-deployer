@@ -32,6 +32,11 @@ from airdot.helpers.docker_helper import docker_helper
 from airdot.helpers.redis_helper import redis_helper
 from airdot.helpers.network_helper import find_available_port
 from airdot.helpers.seldon_helper import seldon_helpers
+from airdot.helpers.content_helper import content_helper
+from airdot.helpers.s2i_helper import s2i_python_helper
+from airdot.contants.runtime_images import seldon_images
+from airdot.helpers.kubernetes_helper import k8s
+
 
 auth_ = authentication()
 # python custom imports
@@ -44,18 +49,22 @@ class Deployer:
         self,
         minio_endpoint: str = "http://127.0.0.1:9000",
         redis_endpoint: str = "localhost:6379",
-        deployment_configuration: dict = {'deployment_type':'test', 'bucket_type': 'minio'}
+        deployment_configuration: dict = {
+            "deployment_type": "test",
+            "bucket_type": "minio",
+        },
     ) -> None:
-        self.docker_client = docker_helper()
+
         self.minio_endpoint = minio_endpoint
         self.redis_endpoint = redis_endpoint
-        self.deployment_type = deployment_configuration['deployment_type']
+        self.deployment_type = deployment_configuration["deployment_type"]
         self.deployment_configuration = deployment_configuration
+        self.docker_client = docker_helper()
         self.redis_helper_obj = redis_helper(
             host=self.redis_endpoint.split(":")[0],
             port=self.redis_endpoint.split(":")[1],
         )
-        if self.deployment_type == 'test':
+        if self.deployment_type == "test":
             self.minio_network = "minio-network"
 
     def _perform_user_login(self):
@@ -85,14 +94,14 @@ class Deployer:
         self,
         func: Callable,
         name: Optional[str] = None,
-        python_version: Optional[str] = None,
+        python_version: Optional[str] = "3.8",
         python_packages: Optional[List[str]] = None,
         system_packages: Optional[List[str]] = None,
     ):
         data_files = None
         dir_id = self.deployment_type
-        bucket_type = self.deployment_type['bucket']
-        
+        bucket_type = self.deployment_type["bucket"]
+
         if callable(func):
             python_version = get_python_default_version(python_version)
             env_python_packages = get_environment_pkgs(
@@ -107,7 +116,7 @@ class Deployer:
                 open_id=dir_id,
                 py_state=func_props,
                 endpoint=self.minio_endpoint,
-                bucket_type=bucket_type
+                bucket_type=bucket_type,
             )  # uploading of data objects.
         elif (
             hasattr(func, "__module__")
@@ -117,18 +126,24 @@ class Deployer:
             pass
         else:
             raise Exception("Passed object is not callable")
-        
-        if self.deployment_type == 'test':
+
+        if self.deployment_type == "test":
             source_file = make_soruce_file(
-                dir=dir_id, pyProps=func_props, source_file_name=name, bucket_type=bucket_type
+                dir=dir_id,
+                pyProps=func_props,
+                source_file_name=name,
+                bucket_type=bucket_type,
             )
 
-        if self.deployment_type == 'seldon':
+        if self.deployment_type == "seldon":
             source_file = make_soruce_file_seldon(
-                dir=dir_id, pyProps=func_props, source_file_name=name, bucket_type=bucket_type
+                dir=dir_id,
+                pyProps=func_props,
+                source_file_name=name,
+                bucket_type=bucket_type,
             )
 
-        elif self.deployment_type == 'kserve':
+        elif self.deployment_type == "kserve":
             pass
 
         return {
@@ -143,7 +158,7 @@ class Deployer:
             "python_version": python_version,
             "system_packages": None,  # need to see this
             "dockerRun": None,  # need to build this
-            'func_props':func_props
+            "func_props": func_props,
         }
 
     def _list_to_json(self, cld_function_string):
@@ -166,13 +181,8 @@ class Deployer:
         curl = f"curl -XPOST {url} -d '{json.dumps(data_dict)}' -H 'Content-Type: application/json' "
         return curl
 
-    def _run_function(self, port):
+    def _run__test_function(self, port, image):
         try:
-            self.image, _ = self.docker_client.create_docker_runtime(
-                deploy_dict=self.deploy_dict
-            )
-            image_name = self.deploy_dict["name"]
-            print(f"docker image {image_name} successfully built")
             self.container = self.docker_client.run_container(
                 self.image,
                 detach=True,
@@ -225,26 +235,60 @@ class Deployer:
             python_version=python_version,
             system_packages=system_packages,
         )
-        
-        # changes for seldon deployment.
-        if self.deployment_type is 'test':
-            print('switching to test deployment no deployment configuration is provided.')
 
-        elif self.deployment_type is 'seldon':
-            seldon_helper_obj = seldon_helpers(deployment_configuration = self.deployment_configuration) 
-            print(f'building seldon configuration for {seldon_helper_obj.get_current_cluster_context}')
+        # changes for seldon deployment.
+        if self.deployment_type is "test":
+            print(
+                "switching to test deployment no deployment configuration is provided."
+            )
             port = find_available_port(8000)
+            content_helper_obj = content_helper(
+                deploy_dict=self.deploy_dict,
+                deployment_type=self.deployment_type,
+                seldon_configuration=None,
+            )
+            deployment_path = content_helper_obj.write_contents()
+            image = self.docker_client.build_image(
+                path=deployment_path, name=self.deploy_dict["name"]
+            )
             print(f"deploying on port: {port}")
-            function_status = self._run_function(port)
+            function_status = self._run__test_function(port=port, image=image)
             if function_status:
                 url = f"http://127.0.0.1:{port}"
                 function_curl = self.build_function_url(url=url)
                 print("deployment ready, access using the curl command below")
                 print(function_curl)
                 self.update_redis(function_curl)
+
+        elif self.deployment_type is "seldon":
+            # building seldon deployment dictionary
+            seldon_helpers_obj = seldon_helpers(
+                deployment_configuration=self.deployment_configuration
+            )
+            seldon_configuration = seldon_helpers_obj.create_seldon_configuration(
+                deployment_dict=self.deploy_dict
+            )
+            # building contents
+            content_helper_obj = content_helper(
+                deploy_dict=self.deploy_dict,
+                deployment_type=self.deployment_type,
+                seldon_configuration=seldon_configuration,
+            )
+            deployment_path = content_helper_obj.write_contents()
+            # building s2i image
+            base_image = seldon_images[self.deploy_dict["python_version"]]
+            builder_image = f'{self.deploy_dict["name"]}:latest'
+            s2i_python_helper_obj = s2i_python_helper(
+                base_image=base_image, builder_image=builder_image
+            )
+            s2i_python_helper_obj.build_image(source_path=deployment_path)
+            # k8s application
+            _ = k8s().apply_kubernetes_resources(
+                resource_paths=deployment_path + "/seldon_model.yaml"
+            )
+
         else:
             print("failed to run function. Please try again.")
-
 
     def update_objects(self, object, function_id):
         data_files: Dict[str, str] = {}

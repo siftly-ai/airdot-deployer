@@ -3,41 +3,42 @@ import yaml
 from kubernetes import config, client
 
 
-class KubernetesHelper:
-    def __init__(self, context=''):  # Optional: specify the context to use
-        config.load_kube_config()
+class k8s:
+    def __init__(self):  # Optional: specify the context to use
+        self.context = self.get_current_cluster_config()
 
     def get_current_cluster_config(self):
         try:
-            current_context = config.list_kube_config_contexts()[1]['context']
+            current_context = config.list_kube_config_contexts()[1]["context"]
             return current_context
         except Exception as e:
-            print(f"Failed to retrieve cluster configuration: {e}")
-            return None
-
-    def get_current_cluster_config(self):
-        try:
-            if self.context:
-                config = subprocess.check_output(['kubectl', 'config', 'view', '--raw', '--minify', '--context', self.context])
-            else:
-                config = subprocess.check_output(['kubectl', 'config', 'view', '--raw', '--minify'])
-            return yaml.safe_load(config)
-        except subprocess.CalledProcessError as e:
             print(f"Failed to retrieve cluster configuration: {e}")
             return None
 
     def apply_kubernetes_resources(self, resource_paths):
         try:
             for path in resource_paths:
-                subprocess.check_call(['kubectl', 'apply', '-f', path, '--context', self.context])
+                subprocess.check_call(
+                    ["kubectl", "apply", "-f", path, "--context", self.context]
+                )
             print("Resources applied successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Failed to apply resources: {e}")
 
-# Example usage:
-# helper = KubernetesHelper(context='my-context')
-# config = helper.get_current_cluster_config()
-# if config:
-#     print(f"Current cluster context: {config['current-context']}")
-#     # Apply a YAML file
-#     helper.apply_kubernetes_resources(['deployment.yaml'])
+    def create_namespace(self, namespace):
+        try:
+            subprocess.check_call(
+                ["kubectl", "create", "namespace", namespace, "--context", self.context]
+            )
+            print(f"Namespace '{namespace}' created successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to create namespace: {e}")
+
+    def delete_namespace(self, namespace):
+        try:
+            subprocess.check_call(
+                ["kubectl", "delete", "namespace", namespace, "--context", self.context]
+            )
+            print(f"Namespace '{namespace}' deleted successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to delete namespace: {e}")
