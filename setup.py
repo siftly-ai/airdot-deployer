@@ -12,7 +12,7 @@ REQUIRED = [
     "google-api-python-client == 2.78.0",
     "google-cloud-core == 2.3.2",
     "google-cloud-storage == 2.7.0",
-    "zstd == 1.5.2.6",
+    # "zstd == 1.5.2.6",
     "boto == 2.49.0",
     "botocore == 1.29.127",
     "boto3 == 1.26",
