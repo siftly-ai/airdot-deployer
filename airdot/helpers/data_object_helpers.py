@@ -100,8 +100,8 @@ def put_secure_data(
     bucket_id, open_id, data: bytes, desc: str, endpoint: str, bucket_type
 ):
     try:
-        if bucket_type is None:
-            print("switching to local minio bucket")
+        if bucket_type == 'minio':
+            print("test deployment, switching to local minio bucket")
             minio_helper_obj = minio_helper(endpoint=endpoint)
             minio_helper_obj.create_bucket(bucket_name=bucket_id)
             minio_helper_obj.put_object(bucket=bucket_id, key=f"{desc}.pkl", data=data)

@@ -174,13 +174,13 @@ def make_soruce_file_seldon(
     )
 
 
-def get_docker_template(req_string):
+def get_docker_template(req_string, source_name):
     dockerBuildParts: List[str] = [
         "FROM python:3.8-slim",
         "ENV APP_HOME /app",
         "WORKDIR $APP_HOME",
         "COPY . ./",
         f"RUN pip install {req_string}",
-        "CMD exec gunicorn --bind :8080 --workers 1 --threads 8 app:app",
+        f"CMD exec gunicorn --bind :8080 --workers 1 --threads 8 {source_name}:app",
     ]
     return dockerBuildParts

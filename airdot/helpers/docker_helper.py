@@ -92,10 +92,12 @@ class docker_helper:
             )
             return image, dir
         return None, None
-
+    
     def build_image(self, path, name):
-        image, _ = self.client.images.build(path=path, tag=f"{name}")
-        return image, dir
+        image, _ = self.client.images.build(
+                path=path, tag=f"{name}"
+            )
+        return image
 
     def get_available_images(self):
         try:

@@ -4,7 +4,9 @@ import subprocess
 def get_s2i_environment(name):
     contents = [
         f"MODEL_NAME={name}",
-        "API_TYPE=REST" "SERVICE_TYPE=MODEL" "PERSISTENCE=0",
+        "API_TYPE=REST",
+        "SERVICE_TYPE=MODEL",
+        "PERSISTENCE=0",
     ]
     return "\n".join(contents)
 
@@ -32,7 +34,7 @@ class s2i_python_helper:
         subprocess.run(command, check=True)
 
     def build_and_push_image(
-        self, source_path, image_name, registry_url, username=None, password=None
+        self, source_path, registry_url=None, username=None, password=None
     ):
         """
         Build a container image using S2I and push it to a container registry.
@@ -43,7 +45,7 @@ class s2i_python_helper:
         :param username: Optional username for the container registry.
         :param password: Optional password for the container registry.
         """
-        self.build_image(source_path, image_name)
+        self.build_image(source_path)
 
         if username and password:
             docker_login_command = [
@@ -57,13 +59,12 @@ class s2i_python_helper:
             ]
             subprocess.run(docker_login_command, check=True)
 
-        docker_tag_command = [
-            "docker",
-            "tag",
-            image_name,
-            f"{registry_url}/{image_name}",
-        ]
-        subprocess.run(docker_tag_command, check=True)
+        # docker_tag_command = [
+        #     "docker",
+        #     "tag",
+        #     f"{self.builder_image}",
+        # ]
+        # subprocess.run(docker_tag_command, check=True)
 
-        docker_push_command = ["docker", "push", f"{registry_url}/{image_name}"]
+        docker_push_command = ["docker", "push", f"{self.builder_image}"]
         subprocess.run(docker_push_command, check=True)

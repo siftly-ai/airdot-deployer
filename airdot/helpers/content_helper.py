@@ -32,10 +32,10 @@ class content_helper:
                 requirements_file_content = self.get_custom_requirements(
                     self.deploy_dict["requirements_txt"], DEFAULT_PKG_LIST
                 )
-                docker_template = get_docker_template(requirements_file_content)
+                docker_template = get_docker_template(requirements_file_content, self.deploy_dict["source_file"]["user_name"].split('.')[0])
                 dockerfile_path = os.path.join(deployment_path, "Dockerfile")
-                self.write_custom_file(dockerfile_path, docker_template)
-                return True
+                self.write_custom_file(dockerfile_path, "\n".join(docker_template))
+                return deployment_path
 
             elif self.deployment_type == "seldon":
                 # write user python file
@@ -61,8 +61,8 @@ class content_helper:
                     s2i_path, get_s2i_environment(self.deploy_dict["name"])
                 )
                 # write kubect yaml file
-                yaml_path = os.path.join(deployment_path, "seldon_model.yaml")
-                self.write_yaml_file(yaml_path, self.seldon_configuration)
+                yaml_path = os.path.join(deployment_path, "seldon_model.json")
+                self.write_json_file(yaml_path, self.seldon_configuration)
                 return deployment_path
 
             elif self.deployment_type == "kserve":

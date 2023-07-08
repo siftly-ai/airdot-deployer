@@ -99,8 +99,8 @@ class Deployer:
         system_packages: Optional[List[str]] = None,
     ):
         data_files = None
-        dir_id = self.deployment_type
-        bucket_type = self.deployment_type["bucket"]
+        dir_id = None
+        bucket_type = self.deployment_configuration["bucket_type"]
 
         if callable(func):
             python_version = get_python_default_version(python_version)
@@ -132,7 +132,6 @@ class Deployer:
                 dir=dir_id,
                 pyProps=func_props,
                 source_file_name=name,
-                bucket_type=bucket_type,
             )
 
         if self.deployment_type == "seldon":
@@ -184,7 +183,7 @@ class Deployer:
     def _run__test_function(self, port, image):
         try:
             self.container = self.docker_client.run_container(
-                self.image,
+                image,
                 detach=True,
                 ports={f"{8080}/tcp": port},
                 network=self.minio_network,
@@ -237,7 +236,7 @@ class Deployer:
         )
 
         # changes for seldon deployment.
-        if self.deployment_type is "test":
+        if self.deployment_type == "test":
             print(
                 "switching to test deployment no deployment configuration is provided."
             )
@@ -260,13 +259,16 @@ class Deployer:
                 print(function_curl)
                 self.update_redis(function_curl)
 
-        elif self.deployment_type is "seldon":
+        elif self.deployment_type == "seldon":
+            if self.deployment_configuration['image_uri'] is None:
+                raise TypeError('cannot provide empty image_uri for seldon deployment')
+
             # building seldon deployment dictionary
             seldon_helpers_obj = seldon_helpers(
                 deployment_configuration=self.deployment_configuration
             )
             seldon_configuration = seldon_helpers_obj.create_seldon_configuration(
-                deployment_dict=self.deploy_dict
+                deploy_dict=self.deploy_dict, image_uri = self.deployment_configuration['image_uri']
             )
             # building contents
             content_helper_obj = content_helper(
@@ -275,13 +277,15 @@ class Deployer:
                 seldon_configuration=seldon_configuration,
             )
             deployment_path = content_helper_obj.write_contents()
+            raise TypeError
             # building s2i image
             base_image = seldon_images[self.deploy_dict["python_version"]]
-            builder_image = f'{self.deploy_dict["name"]}:latest'
+            builder_image = self.deployment_configuration['image_uri']
             s2i_python_helper_obj = s2i_python_helper(
                 base_image=base_image, builder_image=builder_image
             )
-            s2i_python_helper_obj.build_image(source_path=deployment_path)
+            #s2i_python_helper_obj.build_and_push_image(source_path=deployment_path)
+            s2i_python_helper_obj.build_and_push_image(source_path=deployment_path)
             # k8s application
             _ = k8s().apply_kubernetes_resources(
                 resource_paths=deployment_path + "/seldon_model.yaml"

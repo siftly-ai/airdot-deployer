@@ -50,19 +50,21 @@ class SeldonConfiguration(BaseModel):
     kind: Optional[str] = "SeldonDeployment"
     metadata: Optional[SeldonMetadata] = {"name": "seldon_model"}
     specs: Optional[SeldonSpecs] = {
-        "name": "None",
-        "predictors": {
-            "componentSpecs": {
-                "specs": {
-                    "container": {
-                        "name": "None",
-                        "image": "None",
-                        "imagePullPolicy": "ifNotPresent",
-                        "resources": {"requests": {"cpu": "1", "memory": "1M"}},
+        "specs":{
+            "name": "None",
+            "predictors": {
+                "componentSpecs": {
+                    "specs": {
+                        "container": {
+                            "name": "None",
+                            "image": "None",
+                            "imagePullPolicy": "ifNotPresent",
+                            "resources": {"requests": {"cpu": "1", "memory": "1M"}},
+                        }
                     }
                 }
-            }
-        },
+            },
+        }
     }
     graph: Optional[SeldonGraph] = {"name": "None"}
     name: Optional[str] = "default"
