@@ -17,7 +17,6 @@ class k8s:
 
     def apply_kubernetes_resources(self, resource_paths):
         try:
-            print(resource_paths)
             subprocess.check_call(
                     ["kubectl", "apply", "-f", resource_paths]
                 )
@@ -28,11 +27,13 @@ class k8s:
     def create_namespace(self, namespace):
         try:
             subprocess.check_call(
-                ["kubectl", "create", "namespace", namespace, "--context", self.context]
+                ["kubectl", "create", "namespace", namespace]
             )
             print(f"Namespace '{namespace}' created successfully.")
+            return True
         except subprocess.CalledProcessError as e:
             print(f"Failed to create namespace: {e}")
+            return False
 
     def delete_namespace(self, namespace):
         try:

@@ -13,7 +13,8 @@ class Deployment(BaseModel):
                 "apiVersion": "None",
                 "kind": "SeldonDeployment",
                 "metadata": {
-                    "name": "None"
+                    "name": "None",
+                    "namespace":"None"
                 },
                 "spec": {
                     "name": "seldon-test",
@@ -23,7 +24,7 @@ class Deployment(BaseModel):
                         "containers": [{
                             "name": "None",
                             "image": "None",
-                            "imagePullPolicy": "ifNotPresent",
+                            "imagePullPolicy": "Always",
                             "resources": {
                             "requests": {
                                 "cpu": "1",
