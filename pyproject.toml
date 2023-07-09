@@ -30,7 +30,8 @@ dependencies = [
     "boto3==1.26",
     "docker==6.1.2",
     "redis==4.5.5",
-    "seldon-core==1.16"
+    "seldon-core==1.16",
+    "pydantic==1.10.8"
 ]
 
 requires-python = ">=3.6"
@@ -50,7 +51,8 @@ dev = [
     "boto3==1.26",
     "docker==6.1.2",
     "redis==4.5.5",
-    "seldon-core==1.16"
+    "seldon-core==1.16",
+    "pydantic==1.10.8"
 ]
 
 [project.urls]
