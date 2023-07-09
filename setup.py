@@ -20,7 +20,8 @@ REQUIRED = [
     "docker==6.1.2",
     "redis==4.5.5",
     "seldon-core==1.16",
-    "pydantic==1.10.8"
+    "pydantic==1.10.8",
+    "kubernetes==26.1.0"
 ]
 DEV_REQUIRED = [
     "black==22.6.0",
@@ -37,7 +38,8 @@ DEV_REQUIRED = [
     "docker==6.1.2",
     "redis==4.5.5",
     "seldon-core==1.16",
-    "pydantic==1.10.8"
+    "pydantic==1.10.8",
+    "kubernetes==26.1.0"
 ]
 
 setup(
