@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "airdot"
-version = "0.1.0b0"
+version = "0.2.0b0"
 description = "A code base for deploying ml api "
 readme = "README.md"
 authors = [{ name = "airdot-io", email = "abhinav199530singh@gmail.com" }]

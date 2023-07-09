@@ -287,9 +287,12 @@ class Deployer:
             #s2i_python_helper_obj.build_and_push_image(source_path=deployment_path)
             s2i_python_helper_obj.build_and_push_image(source_path=deployment_path)
             # k8s application
-            _ = k8s().apply_kubernetes_resources(
-                resource_paths=deployment_path + "/seldon_model.json"
-            )
+            namespace = seldon_configuration['metadata']['namespace']
+            k8s_obj = k8s()
+            if k8s_obj.create_namespace(namespace=namespace):
+                _ = k8s_obj.apply_kubernetes_resources(
+                    resource_paths=deployment_path + "/seldon_model.json"
+                )
 
         else:
             print("failed to run function. Please try again.")
