@@ -14,6 +14,7 @@ class seldon_helpers(object):
         if self.seldon_configuration['apiVersion'] == "None":
             self.seldon_configuration['apiVersion'] = "machinelearning.seldon.io/v1"
             self.seldon_configuration['metadata']['name'] = f"{deploy_dict['name'].replace('_','-')}"
+            self.seldon_configuration['metadata']['namespace'] = f"{deploy_dict['name'].replace('_','-')}"
             self.seldon_configuration['spec']['predictors'][0]['componentSpecs'][0]['spec']['containers'][0]['name'] = f"{deploy_dict['name'].replace('_','-')}"
             self.seldon_configuration['spec']['predictors'][0]['componentSpecs'][0]['spec']['containers'][0]['image'] = f"{image_uri}"
             self.seldon_configuration['spec']['predictors'][0]['graph']['name'] = f"{deploy_dict['name'].replace('_','-')}"
