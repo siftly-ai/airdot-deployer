@@ -29,7 +29,7 @@ class k8s:
             subprocess.check_call(
                 ["kubectl", "create", "namespace", namespace]
             )
-            print(f"Namespace '{namespace}' created successfully.")
+            print(f"Namespace '{namespace}' created successfully")
             return True
         except subprocess.CalledProcessError as e:
             print(f"Failed to create namespace: {e}")
