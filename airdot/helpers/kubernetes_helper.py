@@ -17,7 +17,6 @@ class k8s:
 
     def apply_kubernetes_resources(self, resource_paths):
         try:
-            print(resource_paths)
             subprocess.check_call(
                     ["kubectl", "apply", "-f", resource_paths]
                 )
