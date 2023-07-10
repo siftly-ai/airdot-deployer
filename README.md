@@ -1,23 +1,32 @@
-# Airdot deployer
+# 🚀 Airdot Deployer
 
 
 [![Python](https://img.shields.io/badge/PythonVersion-3.7%20%7C%203.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-360/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
-**Airdot deployer [Beta]** Tool to take your ml model live right from your jupyter notebook. No need to save model and upload anywhere, airdot-deploy takes care of everything including and not limited to getting your code, requirements, data objects. 
+Welcome aboard the Airdot Deployer [Beta] 🛠️, your very own one-stop solution to take your machine learning model from Jupyter notebooks to the live web 🌐. Say goodbye to the hassle of saving and uploading models manually. Airdot Deployer is a perfect assistant handling everything from code, requirements, data objects, and more. 
 
-**Note - Before proceeding make sure you have installed docker and docker-compose and s2i.if not please follow the steps below**
+## 📋 Pre-requisites 
 
-#### Docker install 
+Before we get started, you'll need to have Docker, Docker Compose, and s2i installed on your machine. 
 
-```bash
-# for mac please visit https://docs.docker.com/desktop/install/mac-install/
-# for windows please visit https://docs.docker.com/desktop/install/windows-install/
-# for linux please visit https://docs.docker.com/desktop/install/linux-install/
-```
+- **Docker**: Docker is an open-source platform used to automate the deployment, scaling, and management of applications. It does this by isolating applications into containers, allowing them to be portable and consistent across different environments. Docker is essential for running the Airdot Deployer, which operates in a containerized environment.
 
-#### s2i install
+- **Docker Compose**: Docker Compose is a tool for defining and running multi-container Docker applications. With Compose, you can use a YAML file to configure your application's services, network, and volumes. This allows you to manage complex multi-container applications with ease.
+
+- **s2i (Source-To-Image)**: s2i is a toolkit and workflow for building reproducible Docker images from source code. It injects source code into a Docker container and assembles a new Docker image for your application. This allows Airdot Deployer to handle your code efficiently, packaging it into a Docker container ready for deployment.
+
+If you don't have these installed yet, no worries! Follow the steps below to get them set up:
+
+### Docker Install
+Please visit the appropriate links to install Docker on your machine:
+- For macOS, visit [here](https://docs.docker.com/desktop/install/mac-install/)
+- For Windows, visit [here](https://docs.docker.com/desktop/install/windows-install/)
+- For Linux, visit [here](https://docs.docker.com/desktop/install/linux-install/)
+
+
+#### S2I install
 For Mac
 You can either follow the installation instructions for Linux (and use the darwin-amd64 link) or you can just install source-to-image with Homebrew:
 
@@ -31,7 +40,8 @@ curl -s https://api.github.com/repos/openshift/source-to-image/releases/latest| 
 For Windows plese follow instruction [here](https://github.com/openshift/source-to-image#for-windows)
 
 
-## How to install
+## 💻 Installation
+Install the Airdot Deployer package using pip:
 
 ```bash
 pip install "git+https://github.com/airdot-io/airdot-Deploy.git@main#egg=airdot"
@@ -43,7 +53,9 @@ pip install "git+https://github.com/airdot-io/airdot-Deploy.git@main#egg=airdot"
 # pypi uri will be added soon
 ```
 
-### How to Use for local deployments
+## 🎯 How to Use
+
+### Local Deployments
 
 #### Setup local minio and redis in your machine
 
@@ -62,6 +74,7 @@ config = {
     'deployment_type':'test',
     'bucket_type':'minio'
 }
+
 deployer = Deployer(deployment_configuration=config) 
 
 # declare a ML function 
