@@ -7,7 +7,32 @@
 
 Welcome aboard the Airdot Deployer [Beta] 🛠️, your very own one-stop solution to take your machine learning model from Jupyter notebooks to the live web 🌐. Say goodbye to the hassle of saving and uploading models manually. Airdot Deployer is a perfect assistant handling everything from code, requirements, data objects, and more. 
 
-## 📋 Pre-requisites 
+## How it Works ? 🤔
+
+```python
+from airdot import Deployer
+import pandas as pd
+
+# Define deployment configuration 
+
+config = {
+    'deployment_type':'test',
+    'bucket_type':'minio'
+}
+
+
+deployer = Deployer(deployment_configuration=config) 
+
+# declare a your  ML function, it can be a huge list of ML function
+df2 = pd.DataFrame(data=[[10,20],[10,40]], columns=['1', '2'])
+def get_value_data(cl_idx='1'):
+    return df2[cl_idx].values.tolist()
+
+# Hit Deploy and its Done 🤩
+deployer.run(get_value_data)
+```
+
+## 📋 Setup Instructions 
 
 Before we get started, you'll need to have Docker, Docker Compose, and s2i installed on your machine. 
 
@@ -60,7 +85,6 @@ pip install "git+https://github.com/airdot-io/airdot-Deploy.git@main#egg=airdot"
 #### Setup local minio and redis in your machine
 
 ```bash
-# run this in terminal.
 docker network create minio-network && wget  https://raw.githubusercontent.com/airdot-io/airdot-Deploy/main/docker-compose.yaml && docker-compose -p airdot up
 ```
 
