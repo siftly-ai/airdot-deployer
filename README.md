@@ -23,7 +23,7 @@ config = {
 
 deployer = Deployer(deployment_configuration=config) 
 
-# declare a your  ML function, it can be a huge list of ML function
+# declare a your  ML function, it can be a list of nested calling of functions
 df2 = pd.DataFrame(data=[[10,20],[10,40]], columns=['1', '2'])
 def get_value_data(cl_idx='1'):
     return df2[cl_idx].values.tolist()
@@ -41,6 +41,8 @@ Before we get started, you'll need to have Docker, Docker Compose, and s2i insta
 - **Docker Compose**: Docker Compose is a tool for defining and running multi-container Docker applications. With Compose, you can use a YAML file to configure your application's services, network, and volumes. This allows you to manage complex multi-container applications with ease.
 
 - **s2i (Source-To-Image)**: s2i is a toolkit and workflow for building reproducible Docker images from source code. It injects source code into a Docker container and assembles a new Docker image for your application. This allows Airdot Deployer to handle your code efficiently, packaging it into a Docker container ready for deployment.
+
+- **seldon-core** This is needed to be setup in your k8s. Want to know more about seldon-core and how it can help ? click [here](https://github.com/airdot-io/airdot-Deploy/main/supplement/SELDONCORE.MD).
 
 If you don't have these installed yet, no worries! Follow the steps below to get them set up:
 
