@@ -42,7 +42,7 @@ Before we get started, you'll need to have Docker, Docker Compose, and s2i insta
 
 - **s2i (Source-To-Image)**: s2i is a toolkit and workflow for building reproducible Docker images from source code. It injects source code into a Docker container and assembles a new Docker image for your application. This allows Airdot Deployer to handle your code efficiently, packaging it into a Docker container ready for deployment.
 
-- **seldon-core** This is needed to be setup in your k8s. Want to know more about seldon-core and how it can help ? click [here](https://github.com/airdot-io/airdot-Deploy/main/supplement/SELDONCORE.MD).
+- **seldon-core** This is needed to be setup in your k8s. Want to know more about seldon-core and how it can help ? click [here](https://github.com/airdot-io/airdot-Deploy/blob/main/supplement/SELDONCORE.md).
 
 If you don't have these installed yet, no worries! Follow the steps below to get them set up:
 
