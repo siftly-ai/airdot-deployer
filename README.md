@@ -7,34 +7,45 @@
 
 Welcome aboard the Airdot Deployer [Beta] 🛠️, your very own one-stop solution to take your machine learning model from Jupyter notebooks to the live web 🌐. Say goodbye to the hassle of saving and uploading models manually. Airdot Deployer is a perfect assistant handling everything from code, requirements, data objects, and more. 
 
-## How it Works ? 🤔
+# Airdot in action 
 
+### Train your model
 ```python
-from airdot import Deployer
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from airdot.deployer import Deployer
+from sklearn import datasets
 import pandas as pd
+import numpy as np
 
-# Define deployment configuration 
-
-config = {
-    'deployment_type':'test',
-    'bucket_type':'minio'
-}
-
-
-deployer = Deployer(deployment_configuration=config) 
-
-# declare a your  ML function, it can be a list of nested calling of functions
-df2 = pd.DataFrame(data=[[10,20],[10,40]], columns=['1', '2'])
-def get_value_data(cl_idx='1'):
-    return df2[cl_idx].values.tolist()
-
-# Hit Deploy and its Done 🤩
-deployer.run(get_value_data)
+iris = datasets.load_iris()
+X = iris.drop(['target','species'], axis=1)
+X = X.to_numpy()[:, (2,3)]
+y = iris['target']
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.5, random_state=42)
+log_reg = LogisticRegression()
+log_reg.fit(X_train,y_train)
 ```
 
-## 📋 Setup Instructions 
+### Test your model
+```python
+def predict(value)
+    return log_reg.predict(value)
+```
 
-Before we get started, you'll need to have Docker, Docker Compose, and s2i installed on your machine. 
+### Deploy in one step 🤯
+```python
+deployer_obj = Deployer().run(predict)
+```
+
+### Use your deployed Model
+```bash
+curl -XPOST http://127.0.0.1:8000 -H 'Content-Type: application/json' -d '{"value": [[4.7, 1.2]]}'
+```
+
+## 📋 Setup Instructions
+
+Before we get started, you'll need to have Docker, Docker Compose, and s2i installed on your machine.
 
 - **Docker**: Docker is an open-source platform used to automate the deployment, scaling, and management of applications. It does this by isolating applications into containers, allowing them to be portable and consistent across different environments. Docker is essential for running the Airdot Deployer, which operates in a containerized environment.
 
