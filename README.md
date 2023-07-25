@@ -6,7 +6,7 @@
 
 Welcome aboard the Airdot Deployer [Beta] 🛠️, your ultimate one-stop solution for seamlessly transitioning your machine learning models from Jupyter notebooks to the live web 🌐. Bid farewell to the tedious process of manually saving and uploading models. Airdot Deployer serves as the perfect assistant, effortlessly managing everything from code and requirements to data objects and beyond, ensuring a smooth deployment experience like never before.
 
-## Airdot can deploy your models in a single step ?
+## Airdot can deploy your models in a single step.
 ```python
 from airdot.deployer import Deployer
 deployer_obj = Deployer().run(<your-ml-predictor>)
@@ -26,44 +26,6 @@ This section should list any major frameworks/libraries used to bootstrap your p
 * K8s Deployment with seldon core  ![docker](/icon/seldon-core.webp)
 
 # Want to try Airdot ? follow setup instructions.
-
-### Train your model
-```python
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from airdot.deployer import Deployer
-from sklearn import datasets
-import pandas as pd
-
-iris = datasets.load_iris()
-iris = pd.DataFrame(
-    data= np.c_[iris['data'], iris['target']],
-    columns= iris['feature_names'] + ['target']
-)
-X = iris.drop(['target','species'], axis=1)
-X = X.to_numpy()[:, (2,3)]
-y = iris['target']
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.5, random_state=42)
-log_reg = LogisticRegression()
-log_reg.fit(X_train,y_train)
-```
-
-### Test your model
-```python
-def predict(value)
-    return log_reg.predict(value)
-```
-
-### Deploy in one step 🤯
-```python
-deployer_obj = Deployer().run(predict)
-```
-
-### Use your deployed Model
-```bash
-curl -XPOST http://127.0.0.1:8000 -H 'Content-Type: application/json' -d '{"value": [[4.7, 1.2]]}'
-```
-
 
 ## 📋 Setup Instructions
 
