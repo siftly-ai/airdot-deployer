@@ -62,9 +62,9 @@ def make_soruce_file(
     source_parts.append(f"def main_{pyProps.name}():")
     source_parts.append("\tdata = request.get_json()")
     source_parts.append("\tif data is None:")
-    source_parts.append(f"\t\treturn jsonify({pyProps.name}())")
+    source_parts.append(f"\t\treturn jsonify(str({pyProps.name}()))")
     source_parts.append("\telse:")
-    source_parts.append(f"\t\treturn jsonify({pyProps.name}(**data))")
+    source_parts.append(f"\t\treturn jsonify(str({pyProps.name}(**data)))")
     return source_file_props(
         name=f"{source_file_name}.py", user_contents="\n".join(source_parts)
     )
