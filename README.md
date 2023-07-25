@@ -19,7 +19,8 @@ curl -XPOST <url> -H 'Content-Type: application/json' -d '{"args": "some-value"}
 ```
 Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly. So why wait? Join our beta program now and experience the future of machine learning deployment with Airdot Deployer.
 
-# Want to try Airdot on your machine ?
+# Want to try Airdot ? follow setup instructions.
+
 ### Train your model
 ```python
 from sklearn.model_selection import train_test_split
