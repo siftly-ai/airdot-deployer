@@ -6,16 +6,16 @@
 
 Welcome aboard the Airdot Deployer [Beta] 🛠️, your ultimate one-stop solution for seamlessly transitioning your machine learning models from Jupyter notebooks to the live web 🌐. Bid farewell to the tedious process of manually saving and uploading models. Airdot Deployer serves as the perfect assistant, effortlessly managing everything from code and requirements to data objects and beyond, ensuring a smooth deployment experience like never before.
 
-With Airdot Deployer, you can easily take your trained machine learning models and deploy them with just a few clicks. Imagine the simplicity of selecting your desired model, specifying the necessary dependencies, and hitting the "Deploy" button. The process is as smooth as pouring water.
-
+## How fast Airdot can deploy your models ?
 ```python
+from airdot.deployer import Deployer
 deployer_obj = Deployer().run(<your-ml-predictor>)
 ```
 
 Once deployed, your model will be up and running on the web, accessible to users worldwide. No more worrying about complex server setups or manual configuration. Airdot Deployer does all the heavy lifting for you.
 
 ```bash
-curl -XPOST <url> -H 'Content-Type: application/json' -d '{"value": "some-value"}'
+curl -XPOST <url> -H 'Content-Type: application/json' -d '{"args": "some-value"}'
 ```
 Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly. So why wait? Join our beta program now and experience the future of machine learning deployment with Airdot Deployer.
 
