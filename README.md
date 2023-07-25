@@ -61,8 +61,8 @@ curl -XPOST http://127.0.0.1:8000 -H 'Content-Type: application/json' -d '{"valu
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 
-* Local Deployment with Docker ![docker](https://cdn.iconscout.com/icon/free/png-512/free-docker-226091.png?f=avif&w=64)
-* K8s Deployment with seldon core
+* Local Deployment with Docker ![docker](/icon/docker.png)
+* K8s Deployment with seldon core  ![docker](/icon/seldon-core.webp)
 
 ## 📋 Setup Instructions
 
