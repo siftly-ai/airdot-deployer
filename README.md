@@ -19,6 +19,13 @@ curl -XPOST <url> -H 'Content-Type: application/json' -d '{"args": "some-value"}
 ```
 Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly. So why wait? Join our beta program now and experience the future of machine learning deployment with Airdot Deployer.
 
+## What does Airdot supports ?
+This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+
+* [![Python](https://img.shields.io/badge/PythonVersion-3.7%20%7C%203.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-360/)
+* Local Deployment with Docker ![docker](/icon/docker.png)
+* K8s Deployment with seldon core  ![docker](/icon/seldon-core.webp)
+
 # Want to try Airdot ? follow setup instructions.
 
 ### Train your model
@@ -58,12 +65,6 @@ deployer_obj = Deployer().run(predict)
 curl -XPOST http://127.0.0.1:8000 -H 'Content-Type: application/json' -d '{"value": [[4.7, 1.2]]}'
 ```
 
-## What does Airdot supports ?
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Python](https://img.shields.io/badge/PythonVersion-3.7%20%7C%203.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-360/)
-* Local Deployment with Docker ![docker](/icon/docker.png)
-* K8s Deployment with seldon core  ![docker](/icon/seldon-core.webp)
 
 ## 📋 Setup Instructions
 
