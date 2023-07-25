@@ -23,7 +23,7 @@ Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 * Local Deployment with Docker ![docker](/icon/docker.png)
-* K8s Deployment with seldon core  ![docker](/icon/seldon-core.webp)
+* K8s Deployment with seldon core  ![core](/icon/seldon-core.webp)
 
 # Want to try Airdot ? follow setup instructions.
 
@@ -49,7 +49,7 @@ For Linux just run following command
 ```bash
 curl -s https://api.github.com/repos/openshift/source-to-image/releases/latest| grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4  | wget -qi -
 ```
-For Windows plese follow instruction [here](https://github.com/openshift/source-to-image#for-windows)
+For Windows please follow instruction [here](https://github.com/openshift/source-to-image#for-windows)
 
 
 
@@ -75,7 +75,7 @@ pip install "git+https://github.com/airdot-io/airdot-Deploy.git@main#egg=airdot"
 
 ### Local Deployments
 
-#### Run following to setup minio and redis on your machine
+#### Run following in terminal to setup minio and redis on your machine
 
 ```bash
 docker network create minio-network && wget  https://raw.githubusercontent.com/airdot-io/airdot-Deploy/main/docker-compose.yaml && docker-compose -p airdot up
@@ -117,13 +117,13 @@ deployer_obj = Deployer().run(predict)
 ```bash
 curl -XPOST http://127.0.0.1:8000 -H 'Content-Type: application/json' -d '{"value": [[4.7, 1.2]]}'
 ```
-#### Want to stop local deployments
+### Want to stop local deployments
 
 ```python
 deployer.stop('get_value_data') # to stop container
 ```
 
-#### Deployment on k8s using seldon-core deployments
+## Deployment on k8s using seldon-core deployment
 
 **Note - This method will use your current cluster and uses seldon-core to deploy**
 
@@ -147,7 +147,7 @@ def get_value_data(cl_idx='1'):
 deployer.run(get_value_data) 
 ```
 
-#### you can also deploy using seldon custom configuration
+#### you can also deploy using seldon custom configuration  
 
 ```python
 from airdot import Deployer
