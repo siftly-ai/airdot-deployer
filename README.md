@@ -60,7 +60,7 @@ curl -XPOST http://127.0.0.1:8000 -H 'Content-Type: application/json' -d '{"valu
 ## What does Airdot supports ?
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-
+* [![Python](https://img.shields.io/badge/PythonVersion-3.7%20%7C%203.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-360/)
 * Local Deployment with Docker ![docker](/icon/docker.png)
 * K8s Deployment with seldon core  ![docker](/icon/seldon-core.webp)
 
