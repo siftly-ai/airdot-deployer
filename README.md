@@ -4,26 +4,35 @@
 [![Python](https://img.shields.io/badge/PythonVersion-3.7%20%7C%203.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-360/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Welcome aboard the Airdot Deployer [Beta] 🛠️, your ultimate one-stop solution for seamlessly transitioning your machine learning models from Jupyter notebooks to the live web 🌐. Bid farewell to the tedious process of manually saving and uploading models. Airdot Deployer serves as the perfect assistant, effortlessly managing everything from code and requirements to data objects and beyond, ensuring a smooth deployment experience like never before.
+Deploy your ML models in **minutes**, not **weeks**.
 
-## Airdot can deploy your models in a single step.
+Airdot will automatically:
+
+1. Restructure your Python code (from Jupyter Notebook/local IDEs) into modules.
+2. Builds a REST API around your code.
+3. Conterize the app.
+4. Spins up the required hardware (local or K8s or cloud).
+5. Monitors for model/data drift and performance (in development)
+
+## Take your ML model from Local to Production with one-line of code. 
+
 ```python
 from airdot.deployer import Deployer
 deployer_obj = Deployer().run(<your-ml-predictor>)
 ```
 
-Once deployed, your model will be up and running on the web, accessible to users worldwide. No more worrying about complex server setups or manual configuration. Airdot Deployer does all the heavy lifting for you.
+Once deployed, your model will be up and running on the intra/internet, accessible to your users. No more worrying about complex server setups or manual configuration. Airdot Deployer does all the heavy lifting for you.
 
 ```bash
 curl -XPOST <url> -H 'Content-Type: application/json' -d '{"args": "some-value"}'
 ```
-Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly. So why wait? Join our beta program now and experience the future of machine learning deployment with Airdot Deployer.
+Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly.
 
-## What does Airdot supports ?
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+## What does Airdot Deployer supports ?
 
 * Local Deployment with Docker ![docker](/icon/docker.png)
 * K8s Deployment with seldon core  ![core](/icon/seldon-core.webp)
+
 
 # Want to try Airdot ? follow setup instructions.
 
@@ -52,13 +61,7 @@ curl -s https://api.github.com/repos/openshift/source-to-image/releases/latest| 
 For Windows please follow instruction [here](https://github.com/openshift/source-to-image#for-windows)
 
 
-
-
-
-
-
-
-## 💻 Airdot Installation
+## 💻 Airdot Deployer Installation
 Install the Airdot Deployer package using pip:
 
 ```bash
