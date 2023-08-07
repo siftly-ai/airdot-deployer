@@ -6,7 +6,7 @@
 
 Deploy your ML models in **minutes**, not **weeks**.
 
-Airdot will automatically:
+Airdot Deployer will automatically:
 
 1. Restructure your Python code (from Jupyter Notebook/local IDEs) into modules.
 2. Builds a REST API around your code.
