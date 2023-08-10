@@ -6,27 +6,25 @@ with open("README.md", "r") as fh:
 VERSION = "0.2.0b0"
 REQUIRES_PYTHON = ">=3.7.0"
 REQUIRED = [
-    "black==22.6.0",
-    "pytest==7.1.2",
-    "PyYAML==5.4.1",
-    "google-api-python-client==2.78.0",
-    "google-cloud-core==2.3.2",
-    "google-cloud-storage==2.7.0",
+    "black==22.6",
+    "pytest==7.1",
+    "google-api-python-client==2.78",
+    "google-cloud-core==2.3",
+    "google-cloud-storage==2.7",
     "google-auth",
-    "zstd==1.5.2.6",
-    "boto==2.49.0",
-    "botocore==1.29.127",
+    "boto==2.49",
+    "botocore==1.29",
     "boto3==1.26",
-    "docker==6.1.2",
-    "redis==4.5.5",
+    "docker==6.1",
+    "redis==4.5",
     "seldon-core==1.16",
     "pydantic==1.10.8",
-    "kubernetes==26.1.0"
+    "kubernetes"
 ]
+
 DEV_REQUIRED = [
     "black==22.6.0",
     "pytest==7.1.2",
-    "PyYAML==5.4.1",
     "google-api-python-client==2.78.0",
     "google-cloud-core==2.3.2",
     "google-cloud-storage==2.7.0",
