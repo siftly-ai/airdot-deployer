@@ -7,7 +7,6 @@ import hashlib
 import pickle
 from google.cloud import storage
 from typing import Dict, Tuple, Any, cast
-import zstd
 import pprint
 import yaml
 
