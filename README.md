@@ -71,7 +71,7 @@ pip install "git+https://github.com/airdot-io/airdot-Deploy.git@main#egg=airdot"
 ## or
 
 ```bash
-# pypi uri will be added soon
+pip install airdot
 ```
 
 ## 🎯 Let's try out
