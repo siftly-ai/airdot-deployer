@@ -51,6 +51,14 @@ class Deployer:
             "bucket_type": "minio",
         },
     ) -> None:
+        """
+        Deployer class provides interface for user to create and deploy their ML Models
+
+        Args:
+            minio_endpoint (str, optional): Local minio endpoint. Defaults to "http://127.0.0.1:9000".
+            redis_endpoint (str, optional): Local redis endpoint. Defaults to "localhost:6379".
+            deployment_configuration (dict, optional): _description_. Defaults to { "deployment_type": "test", "bucket_type": "minio", }.
+        """
 
         self.minio_endpoint = minio_endpoint
         self.redis_endpoint = redis_endpoint
@@ -95,6 +103,37 @@ class Deployer:
         python_packages: Optional[List[str]] = None,
         system_packages: Optional[List[str]] = None,
     ):
+        """
+        Build the source code from user specified function, this is done by tracking call trace
+        of the function.
+
+        Args:
+            func (Callable): primary function which predicts, this can be model object itself.
+            name (Optional[str], optional): service name. Defaults to None.
+            python_version (Optional[str], optional): python version to be used for runtime. Defaults to "3.8".
+            python_packages (Optional[List[str]], optional): List of python pkgs 
+                if not provided uses func to get user pakgs. Defaults to None.
+            system_packages (Optional[List[str]], optional): Not yet implemented. Defaults to None.
+
+        Raises:
+            Exception: if func is not callable
+
+        Returns:
+            dict: {
+                "source_file": source code,
+                "value_files": {},
+                "name": name of the function,
+                "data_files": object datafiles like datframes or model object files,
+                "module": service name,
+                "arg_names": args for primary function to call service,
+                "arg_types": types but only available if types defined in function definition,
+                "requirements_txt": list of python packages to be used in order to run the callable,
+                "python_version": python version,
+                "system_packages": Not Implemented
+                "dockerRun": Not implemented
+                "func_props": properties of function,
+        }
+        """
         data_files = None
         dir_id = None
         bucket_type = self.deployment_configuration["bucket_type"]
@@ -191,10 +230,22 @@ class Deployer:
             return False
 
     def restart(self, function_id):
+        """
+        To restart service. Currently only implemented for local deployment
+
+        Args:
+            function_id (str): name of service
+        """
         container_id = self.docker_client.get_container_id(function_id)
         self.docker_client.restart_container(container_id=container_id)
 
     def stop(self, image_name):
+        """
+        To stop the service. Currently only implemented for local deployment
+
+        Args:
+            image_name (str):  name of service
+        """
         try:
             container_id = self.docker_client.get_container_id(image_name=image_name)
             container_status = self.docker_client.kill_container(
@@ -222,6 +273,19 @@ class Deployer:
         python_packages: Optional[List[str]] = None,
         system_packages: Optional[List[str]] = None,
     ):
+        """_summary_
+
+        Args:
+            func (Callable): primary function which predicts, this can be model object itself.
+            name (Optional[str], optional): service name. Defaults to None.
+            python_version (Optional[str], optional): python version to be used for runtime. Defaults to "3.8".
+            python_packages (Optional[List[str]], optional): List of python pkgs 
+                if not provided uses func to get user pakgs. Defaults to None.
+            system_packages (Optional[List[str]], optional): Not yet implemented. Defaults to None.
+
+        Raises:
+            TypeError: raise if empty seldon uri supplied with seldon deployment.
+        """
 
         print("deployment started")
         self.deploy_dict = self.build_deployment(
@@ -295,6 +359,16 @@ class Deployer:
             print("failed to run function. Please try again.")
 
     def update_objects(self, object, function_id):
+        """_summary_
+
+        Args:
+            object (list, tuple): Either list of tuple or just a tuple. tuple will contain two values
+                object name and object
+            function_id (str): service name
+
+        Returns:
+            bool: True if objects successfully updated else False. Currently only Implemented for local deployment.
+        """
         data_files: Dict[str, str] = {}
         if (
             isinstance(object, list)
@@ -403,6 +477,9 @@ class Deployer:
         return data_objects_list
 
     def list_deployments(self):
+        """
+        List all deployments. Currently only Implemented for local deployment.
+        """
         user_functions = self.redis_helper_obj.get_keys("*")
         if user_functions is not None:
             keys = ["deployment-name", "args", "data-objects"]
