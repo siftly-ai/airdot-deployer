@@ -91,13 +91,14 @@ from sklearn.linear_model import LogisticRegression
 from airdot.deployer import Deployer
 from sklearn import datasets
 import pandas as pd
+import numpy as np
 
 iris = datasets.load_iris()
 iris = pd.DataFrame(
     data= np.c_[iris['data'], iris['target']],
     columns= iris['feature_names'] + ['target']
 )
-X = iris.drop(['target','species'], axis=1)
+X = iris.drop(['target'], axis=1)
 X = X.to_numpy()[:, (2,3)]
 y = iris['target']
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.5, random_state=42)
