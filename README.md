@@ -14,7 +14,7 @@ Airdot Deployer will automatically:
 4. Spins up the required hardware (local or K8s or cloud).
 5. Monitors for model/data drift and performance (in development)
 
-## Take your ML model from Local to Production with one-line of code. 
+## Take your ML model from Local to Production with one-line of code
 
 ```python
 from airdot.deployer import Deployer
@@ -26,6 +26,7 @@ Once deployed, your model will be up and running on the intra/internet, accessib
 ```bash
 curl -XPOST <url> -H 'Content-Type: application/json' -d '{"args": "some-value"}'
 ```
+
 Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly.
 
 ## What does Airdot Deployer supports ?
@@ -33,8 +34,7 @@ Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer 
 * Local Deployment with Docker ![docker](/icon/docker.png)
 * K8s Deployment with seldon core  ![core](/icon/seldon-core.webp)
 
-
-# Want to try Airdot ? follow setup instructions.
+# Want to try Airdot ? follow setup instructions
 
 ## 📋 Setup Instructions
 
@@ -85,6 +85,7 @@ docker network create minio-network && wget  https://raw.githubusercontent.com/a
 ```
 
 ### Train your model
+
 ```python
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -107,24 +108,28 @@ log_reg.fit(X_train,y_train)
 ```
 
 ### Test your model
+
 ```python
-def predict(value)
+def predict(value):
     return log_reg.predict(value)
 ```
 
 ### Deploy in one step 🤯
+
 ```python
 deployer_obj = Deployer().run(predict)
 ```
 
 ### Use your deployed Model
+
 ```bash
 curl -XPOST http://127.0.0.1:8000 -H 'Content-Type: application/json' -d '{"value": [[4.7, 1.2]]}'
 ```
-### Want to stop local deployments
+
+### Want to stop your deployment
 
 ```python
-deployer.stop('get_value_data') # to stop container
+deployer.stop('predict') # to stop container
 ```
 
 ## Deployment on k8s using seldon-core deployment
