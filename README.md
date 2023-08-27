@@ -65,7 +65,7 @@ For Windows please follow instruction [here](https://github.com/openshift/source
 Install the Airdot Deployer package using pip:
 
 ```bash
-pip install "git+https://github.com/airdot-io/airdot-Deploy.git@main#egg=airdot"
+pip install "git+https://github.com/airdot-io/airdot-deployer.git@main#egg=airdot"
 ```
 
 ## or
@@ -81,7 +81,7 @@ pip install airdot
 #### Run following in terminal to setup minio and redis on your machine
 
 ```bash
-docker network create minio-network && wget  https://raw.githubusercontent.com/airdot-io/airdot-Deploy/main/docker-compose.yaml && docker-compose -p airdot up
+docker network create minio-network && wget  https://raw.githubusercontent.com/airdot-io/airdot-deployer/main/docker-compose.yaml && docker-compose -p airdot up
 ```
 
 ### Train your model

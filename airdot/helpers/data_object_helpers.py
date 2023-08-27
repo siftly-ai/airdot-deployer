@@ -21,7 +21,6 @@ NULL_BYTE = b"\x00"
 
 from airdot.helpers.minio_helper import minio_helper
 
-
 def serialize_zstd(obj) -> Tuple[bytes, str, int]:
     pkl_data = pickle.dumps(obj)
     content_hash = f"sha1:{hashlib.sha1(pkl_data).hexdigest()}"
@@ -104,6 +103,7 @@ def put_secure_data(
             minio_helper_obj.create_bucket(bucket_name=bucket_id)
             minio_helper_obj.put_object(bucket=bucket_id, key=f"{desc}.pkl", data=data)
             return True
+        # TODO add gcs and aws support
     except Exception as e:
         print(f"failed to upload data object. Please try again {e}")
         return False
