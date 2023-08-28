@@ -27,7 +27,8 @@ dependencies =  [
     "docker==6.1",
     "redis==4.5",
     "pydantic==1.10.8",
-    "kubernetes"
+    "kubernetes",
+    "tabulate"
 ]
 
 requires-python = ">=3.6"

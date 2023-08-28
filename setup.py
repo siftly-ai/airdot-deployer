@@ -19,7 +19,8 @@ REQUIRED = [
     "redis==4.5",
     "seldon-core==1.16",
     "pydantic==1.10.8",
-    "kubernetes"
+    "kubernetes",
+    "tabulate"
 ]
 
 DEV_REQUIRED = [
