@@ -46,3 +46,49 @@ This class is responsible for managing all user operations including.
 - python_packages (Optional[List[str]], optional): List of python pkgs
     if not provided uses func to get user pakgs. Defaults to None.
 - system_packages (Optional[List[str]], optional): Not yet implemented. Defaults to None.
+
+#### build_deployment() API (Only Intended to be used by Advanced users)
+
+``` py hl_lines="1 2 3"
+>>> from airdot.deployer import Deployer
+>>> deployer_obj = Deployer()
+>>> deployer_obj.build_deployment(<callable>)
+>>> {'source_file': {'user_name': 'source.py',
+>>> 'seldon_name': 'seldon_wrapper.py',
+>>> 'seldon_contents': None,
+>>> 'user_contents': `{user auto generated ML microservice}`,
+>>> 'value_files': {},
+>>> 'name': 'predict',
+>>> 'data_files': `{<user data objects>}`,
+>>> 'module': 'source',
+>>> 'arg_names': ['value'],
+>>> 'arg_types': {},
+>>> 'requirements_txt': 'numpy==1.24.3\npandas==1.5.2\nscikit-learn==1.3.0',
+>>> 'python_version': '3.8',
+>>> 'system_packages': None,
+>>> 'dockerRun': None,
+>>> 'func_props':}
+```
+
+##### Arguments
+
+- func (Callable): primary function which predicts, this can be model object itself.
+- name (Optional[str], optional): service name. Defaults to None.
+- python_version (Optional[str], optional): python version to be used for runtime. Defaults to "3.8".
+- python_packages (Optional[List[str]], optional): List of python pkgs
+    if not provided uses func to get user pakgs. Defaults to None.
+- system_packages (Optional[List[str]], optional): Not yet implemented. Defaults to None.
+
+
+#### stop() API (currently only applicable for local deployments)
+
+``` py hl_lines="1 2 3"
+>>> from airdot.deployer import Deployer
+>>> deployer_obj = Deployer()
+>>> deployer_obj.stop('<str name of the user ML microservice>')
+>>> deployment killed successfully
+```
+
+##### Arguments
+
+- image_name (str):  name of service

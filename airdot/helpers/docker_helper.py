@@ -48,7 +48,7 @@ class docker_helper:
         container_id = None
         containers = self.client.containers.list(all=True)
         for container in containers:
-            if container.image.tags[0].split(":")[0] == image_name:
+            if len(container.image.tags) > 0 and container.image.tags[0].split(":")[0] == image_name:
                 container_id = container.id
         return container_id
 
