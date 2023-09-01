@@ -71,3 +71,19 @@ For Windows please follow instruction [here](https://github.com/openshift/source
 ### Setting up seldon-core using kind cluster
 
 One of the simple way of setting up seldon-core on local machine is to first setup a local custer using kind and then install seldon-core on top of it. Seldon-core has a very detailed blog of setting up seldon-core using kind please click [here](https://docs.seldon.io/projects/seldon-core/en/latest/install/kind.html)
+
+
+### checking installation
+
+You can check if every thing went fine by just running few commands mentioned below.
+
+To check if you are connected to local cluster
+```bash
+kubectl get nodes
+```
+You should get similar output Note - version might be different
+```bash
+NAME                   STATUS   ROLES           AGE   VERSION
+seldon-control-plane   Ready    control-plane   58d   v1.27.3
+```
+
