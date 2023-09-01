@@ -83,7 +83,7 @@ To check if you are connected to local cluster
 ```bash
 kubectl get nodes
 ```
-You should get similar output Note - version might be different
+You should get similar output. (Note - version might be different)
 ```bash
 NAME                   STATUS   ROLES           AGE   VERSION
 seldon-control-plane   Ready    control-plane   58d   v1.27.3
