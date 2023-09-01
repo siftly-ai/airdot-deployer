@@ -1,17 +1,17 @@
-# Welcome to MkDocs
+This is the official documentation for the
+`Airdot Deployer` your one stop ML microservice deployment solution
+[Star us on Github](
+    https://github.com/airdot-io/airdot-deployer).
+Its aim is to solve your ML deployment once n for all
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+## Table Of Contents
 
-## Commands
+The documentation describes best practice for using Airdot Deployer.
+The documentation is divided into following parts.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+1. [Getting started](getting_started.md)
+2. [start deployment](start_deployment.md)
+3. [stop deployment](stop_deployment.md)
 
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Quickly find what you're looking for depending on
+your use case by looking at the different pages.
