@@ -10,6 +10,7 @@ This setup is for users who only want's to test airdot and are not much familier
 
 ### Docker Install
 Please visit the appropriate links to install Docker on your machine:
+
 - For macOS, visit [here](https://docs.docker.com/desktop/install/mac-install/)
 - For Windows, visit [here](https://docs.docker.com/desktop/install/windows-install/)
 - For Linux, visit [here](https://docs.docker.com/desktop/install/linux-install/)
@@ -28,12 +29,13 @@ Since for local setup airdot requires a test bucket we uses local minio for obje
 docker network create minio-network && wget  https://raw.githubusercontent.com/airdot-io/airdot-deployer/main/docker-compose.yaml && docker-compose -p airdot up
 ```
 
-## 📋 Local setup (basic without cluster)
+## 📋 Local setup (basic with kind cluster setup)
 
 This setup is for users who want's to test how airdot helps in accelerating seldon-core deployment. The initial setup is similar to previous setup. 
 
 ### Docker Install
 Please visit the appropriate links to install Docker on your machine:
+
 - For macOS, visit [here](https://docs.docker.com/desktop/install/mac-install/)
 - For Windows, visit [here](https://docs.docker.com/desktop/install/windows-install/)
 - For Linux, visit [here](https://docs.docker.com/desktop/install/linux-install/)
