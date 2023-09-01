@@ -48,19 +48,16 @@ extra:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/willettjames/
 
-# markdown_extensions:
-#   - pymdownx.highlight:
-#       anchor_linenums: true
-#   - pymdownx.inlinehilite
-#   - pymdownx.snippets
-#   - admonition
-#   - pymdownx.arithmatex:
-#       generic: true
-#   - footnotes
-#   - pymdownx.details
-#   - pymdownx.superfences
-#   - pymdownx.mark
-#   - attr_list
-#   - pymdownx.emoji:
-#       emoji_index: !!python/name:materialx.emoji.twemoji
-#       emoji_generator: !!python/name:materialx.emoji.to_svg
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
