@@ -3,9 +3,8 @@ site_name: Airdot Deployer Docs
 nav:
   - index.md
   - getting_started.md
-  - start_deployment.md
-  - stop_deployment.md
-
+  - using_airdot.md
+  
 
 site_url: https://https://airdot-io.github.io/airdot-deployer/
 theme:
