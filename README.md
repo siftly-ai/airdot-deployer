@@ -6,6 +6,8 @@
 
 Deploy your ML models in **minutes**, not **weeks**.
 
+Detailed documentation can be found [here](https://airdot-io.github.io/airdot-deployer/)
+
 Airdot Deployer will automatically:
 
 1. Restructure your Python code (from Jupyter Notebook/local IDEs) into modules.
@@ -29,7 +31,7 @@ curl -XPOST <url> -H 'Content-Type: application/json' -d '{"args": "some-value"}
 
 Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly.
 
-Please checkout the [documentation](https://airdot-io.github.io/airdot-deployer/)
+
 
 ## What does Airdot Deployer supports ?
 
