@@ -4,6 +4,7 @@ nav:
   - index.md
   - getting_started.md
   - using_airdot.md
+  - example.md
   
 
 site_url: https://https://airdot-io.github.io/airdot-deployer/
