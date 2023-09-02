@@ -34,7 +34,7 @@ theme:
         icon: material/toggle-switch
         name: Switch to light mode    
       primary: teal
-      accent: lime
+      accent: blue
 
 plugins:
   - social
