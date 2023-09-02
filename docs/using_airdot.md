@@ -1,4 +1,4 @@
-# Using Airdot
+# Airdot API reference
 This page provides detailed documentation of all the methods airdot-deployer provides and how to use them, before moving moving ahead please make sure you have completed setting up airdot.
 
 Using Airdot is actually quite simple and efficient and has not any complex methods which might confuses the user. Airdot has only one class which is `Deployer` rest only are its methods.
