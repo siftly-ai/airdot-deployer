@@ -10,6 +10,7 @@ nav:
 site_url: https://https://airdot-io.github.io/airdot-deployer/
 theme:
   name: material
+  logo: icon/logo.jpeg
   features:
     - navigation.tabs
     - navigation.sections
