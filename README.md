@@ -29,7 +29,7 @@ curl -XPOST <url> -H 'Content-Type: application/json' -d '{"args": "some-value"}
 
 Whether you're a data scientist, developer, or tech enthusiast, Airdot Deployer empowers you to showcase your machine learning prowess and share your creations effortlessly.
 
-Please checkout the [documentation]([https](https://airdot-io.github.io/airdot-deployer/))
+Please checkout the [documentation](https://airdot-io.github.io/airdot-deployer/)
 
 ## What does Airdot Deployer supports ?
 
