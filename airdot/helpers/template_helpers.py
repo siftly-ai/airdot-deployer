@@ -19,7 +19,7 @@ def make_soruce_file(
 
     source_parts: List[str] = [
         "import sys",
-        "from flask import escape, jsonify, Flask, request",
+        "from flask import jsonify, Flask, request",
         "import pickle",
         "import boto3",
         "app = Flask('ml-deployer')",
@@ -79,7 +79,7 @@ def build_source_template(
 ):
     source_parts: List[str] = [
         "import sys",
-        "from flask import escape, jsonify, Flask, request",
+        "from flask import jsonify, Flask, request",
         "import pickle",
         "import logging",
         "from io import BytesIO, StringIO",
